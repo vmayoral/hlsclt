@@ -13,6 +13,7 @@ from .helper_funcs import *
 from .clean_commands import clean_commands
 from .build_commands import build_commands
 from .report_commands import report_commands
+from .optimize_commands import optimize_commands
 
 ### Main Click Entry Point ###
 @click.group()
@@ -41,3 +42,4 @@ cli.add_command(build_commands.build)
 cli.add_command(report_commands.report)
 cli.add_command(report_commands.open_gui)
 cli.add_command(report_commands.status)
+cli.add_command(optimize_commands.optimize)
