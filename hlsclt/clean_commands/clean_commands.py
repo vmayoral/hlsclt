@@ -2,6 +2,7 @@
 """ Clean up subcommands for HLSCLT.
 
 Copyright (c) 2017 Ben Marshall
+    Modified by Víctor Mayoral Vilches
 """
 
 ### Imports ###
