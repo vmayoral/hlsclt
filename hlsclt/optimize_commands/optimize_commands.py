@@ -20,7 +20,8 @@ def abort_if_false(ctx, param, value):
 def optimize_results(ctx):
         config = ctx.obj.config
         click.echo("Main function.")
-        build_commands.build(ctx)
+        # bring some of the functions from build here to avoid hacking the code unnecesarily
+        build_commands.do_start_build_stuff(ctx)
 
 ### Click Command Definitions ###
 # Optimize Command
