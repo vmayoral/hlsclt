@@ -163,9 +163,9 @@ def display_optimize(ctx):
                 summary_line_elements = [x.strip() for x in summary_line.split('|')]
                 latency_min = summary_line_elements[1]
                 latency_max = summary_line_elements[2]
-                interval_min = summary_line_elements[3]
-                interval_max = summary_line_elements[4]
-                results_from_solution.append(float(clk_estimated)*float(interval_max))
+                interval_min = float(summary_line_elements[3]) + 1
+                interval_max = float(summary_line_elements[4]) + 1
+                results_from_solution.append((float(clk_estimated) + float(clk_uncertainty))*float(interval_max))
 
                 # Fetch line 32, latency in cycles
                 #       |Utilization (%)  |        0|      0|       0|   ~0  |
