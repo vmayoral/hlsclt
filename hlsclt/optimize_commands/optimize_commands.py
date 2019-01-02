@@ -171,19 +171,33 @@ def display_optimize(ctx):
                 #       |Utilization (%)  |        0|      0|       0|   ~0  |
                 # By default it's line 63
                 utilization_line = report_content[62]
+                total_line = report_content[58]
                 # this line may not always be in the same positon thereby we need to search for it
                 # and rewrite it
-                for line in report_content:
-                    if "Utilization" in line:
-                        utilization_line = line
+                for i in range(len(report_content)):
+                    if "Utilization" in report_content[i]:
+                        utilization_line = report_content[i]
+                        total_line = report_content[i - 4]
+
                 utilization_line_elements = [x.strip() for x in utilization_line.split('|')]
                 bram_utilization = utilization_line_elements[2]
-                results_from_solution.append(bram_utilization)
                 dsp_utilization = utilization_line_elements[3]
-                results_from_solution.append(dsp_utilization)
                 ff_utilization = utilization_line_elements[4]
-                results_from_solution.append(ff_utilization)
                 lut_utilization = utilization_line_elements[5]
+
+                total_line_elements = [x.strip() for x in total_line.split('|')]
+                bram_total = total_line_elements[2]
+                dsp_total = total_line_elements[3]
+                ff_total = total_line_elements[4]
+                lut_total = total_line_elements[5]
+
+                results_from_solution.append(bram_total)
+                results_from_solution.append(bram_utilization)
+                results_from_solution.append(dsp_total)
+                results_from_solution.append(dsp_utilization)
+                results_from_solution.append(ff_total)
+                results_from_solution.append(ff_utilization)
+                results_from_solution.append(lut_total)
                 results_from_solution.append(lut_utilization)
 
                 # append results from this iteration in the general dictionary
@@ -198,7 +212,8 @@ def display_optimize(ctx):
     # Create data structures to hold the results.
     #  each element in the dictionary contains:
     #     "solutionN": [clk_target, clk_estimated, float(clk_estimated)*float(interval_max),
-    #                        ,bram_utilization, dsp_utilization, ff_utilization, lut_utilization]
+    #                        ,bram_total, bram_utilization, dsp_total, dsp_utilization,
+    #                         ff_total, ff_utilization, lut_total, lut_utilization]
     click.echo("Solution#" + "\t" + "tar.clk" + "\t" + "est.clk" + "\t\t" + "time_max" + "\t"+"BRAM_18K"
         + "\t"+ "DSP48E"+ "\t"+ "FF"+ "\t"+ "LUT")
 
@@ -209,9 +224,9 @@ def display_optimize(ctx):
     # for key, element in results.items():
     for key, element in results:
         click.echo(str(key) + "\t" + click.style(str(element[0]), fg="yellow") + "\t" + str(element[1])
-            + "\t\t" + click.style(str(element[2]), fg="cyan") + "\t\t" + str(element[3]) + "%\t\t" + str(element[4]) + "%\t" + str(element[5])
-            + "%\t" + str(element[6])+"%")
-
+            + "\t\t" + click.style(str(element[2]), fg="cyan") + "\t\t" + str(element[3]) + " (" + str(element[4])
+            + "%)\t\t" + str(element[5]) + " (" + str(element[6]) + "%)\t" + str(element[7]) + " (" + str(element[8])
+            + "%)\t" + str(element[9]) + " (" + str(element[10]) + "%)\t")
 
 ###################################################
 
