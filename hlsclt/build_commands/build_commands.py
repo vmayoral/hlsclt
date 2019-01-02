@@ -48,9 +48,10 @@ def do_default_build(ctx):
     solution_num = ctx.obj.solution_num
     file.write("csim_design -clean" + (" -compiler clang" if config.get("compiler","") == "clang" else "") + " \n")
     file.write("csynth_design" + "\n")
-    file.write("cosim_design -O -rtl " + config["language"] + "\n")
-    file.write("export_design -format ip_catalog" + "\n")
-    file.write("export_design -format sysgen" + "\n")
+    if not ctx.params['simple']:
+        file.write("cosim_design -O -rtl " + config["language"] + "\n")
+        file.write("export_design -format ip_catalog" + "\n")
+        file.write("export_design -format sysgen" + "\n")
 
 # Function which defines the main actions of the 'csim' command.
 def do_csim_stuff(ctx):
@@ -139,8 +140,9 @@ def do_end_build_stuff(ctx,sub_command_returns,report):
 @click.group(chain=True, invoke_without_command=True, short_help='Run HLS build stages.')
 @click.option('-k','--keep', is_flag=True, help='Preserves existing solutions and creates a new one.')
 @click.option('-r','--report', is_flag=True, help='Open build reports when finished.')
+@click.option('-s','--simple', is_flag=True, help='Build csim and syn only.')
 @click.pass_context
-def build(ctx,keep,report):
+def build(ctx,keep,report, simple):
     """Runs the Vivado HLS tool and executes the specified build stages."""
     ctx.obj.solution_num = find_solution_num(ctx)
     ctx.obj.file = do_start_build_stuff(ctx)
@@ -149,7 +151,7 @@ def build(ctx,keep,report):
 # Callback which executes when all specified build subcommands have been finished.
 @build.resultcallback()
 @click.pass_context
-def build_end_callback(ctx,sub_command_returns,keep,report):
+def build_end_callback(ctx,sub_command_returns,keep,report, simple):
     # Catch the case where no subcommands have been issued and offer a default build
     if not sub_command_returns:
         if click.confirm("No build stages specified, would you like to run a default sequence using all the build stages?", abort=True):
