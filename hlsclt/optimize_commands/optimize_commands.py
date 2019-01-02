@@ -169,7 +169,13 @@ def display_optimize(ctx):
 
                 # Fetch line 32, latency in cycles
                 #       |Utilization (%)  |        0|      0|       0|   ~0  |
+                # By default it's line 63
                 utilization_line = report_content[62]
+                # this line may not always be in the same positon thereby we need to search for it
+                # and rewrite it
+                for line in report_content:
+                    if "Utilization" in line:
+                        utilization_line = line
                 utilization_line_elements = [x.strip() for x in utilization_line.split('|')]
                 bram_utilization = utilization_line_elements[2]
                 results_from_solution.append(bram_utilization)
