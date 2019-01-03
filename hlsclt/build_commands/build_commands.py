@@ -45,7 +45,6 @@ def do_start_build_stuff(ctx):
 def do_default_build(ctx):
     config = ctx.obj.config
     file = ctx.obj.file
-    solution_num = ctx.obj.solution_num
     file.write("csim_design -clean" + (" -compiler clang" if config.get("compiler","") == "clang" else "") + " \n")
     file.write("csynth_design" + "\n")
     if not ctx.params['simple']:
