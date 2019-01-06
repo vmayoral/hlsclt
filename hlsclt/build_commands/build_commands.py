@@ -117,12 +117,18 @@ def do_end_build_stuff(ctx,sub_command_returns,report):
     destiny = config["project_name"] + "/solution" + str(solution_num)
     destiny_src = destiny + "/src"
     destiny_config = destiny + "/hls_config.py"
-    try:
-        click.echo("Copying the source and config files to solution"+str(solution_num))
+    click.echo("Copying the source and config files to solution"+str(solution_num))
+    # If we are overwriting an existing solution delete the source directory first.
+    if ctx.params['keep'] == 0:
+        shutil.rmtree(destiny_src, ignore_errors=True)
         shutil.copytree("src", destiny_src)
         shutil.copyfile("hls_config.py", destiny_config)
-    except FileExistsError:
-        click.echo(click.style("Files already exist and not backed up to avoid overwritting in solution"+str(solution_num), fg="red"))
+    # try:
+    #     click.echo("Copying the source and config files to solution"+str(solution_num))
+    #     shutil.copytree("src", destiny_src)
+    #     shutil.copyfile("hls_config.py", destiny_config)
+    # except FileExistsError:
+    #     click.echo(click.style("Files already exist and not backed up to avoid overwritting in solution"+str(solution_num), fg="red"))
 
 
 
